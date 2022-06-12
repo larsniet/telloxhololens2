@@ -106,6 +106,17 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 	// Update is called once per frame
 	void Update () {
 
+		var eular = Tello.state.toEuler();
+		double pitch = eular[0] * (180 / 3.141592);
+		double roll = eular[1] * (180 / 3.141592);
+		double yaw = eular[2] * (180 / 3.141592);
+
+		Debug.Log(" Pitch:" + pitch + " Roll:" + roll + " Yaw:" + yaw);
+		Debug.Log(" AR element yaw: " + drone.transform.localRotation.eulerAngles.y);
+
+		Vector3 rotation = new Vector3((float) eular[0], (float) eular[1], (float) eular[2]);
+		drone.transform.Rotate(rotation);
+
 		if (Input.GetKeyDown(KeyCode.T)) {
 			Tello.takeOff();
 		} else if (Input.GetKeyDown(KeyCode.L)) {
@@ -185,10 +196,7 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 
 	public void Tello_onMove()
     {
-		var eular = Tello.state.toEuler();
-		Debug.Log(" Pitch:" + eular[0] * (180 / 3.141592) + " Roll:" + eular[1] * (180 / 3.141592) + " Yaw:" + eular[2] * (180 / 3.141592));
 
-		Debug.Log(" AR element yaw: " +drone.transform.localRotation.eulerAngles.y);
 	}
 
 }
