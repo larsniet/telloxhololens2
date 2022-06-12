@@ -104,8 +104,6 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 	// Update is called once per frame
 	void Update () {
 
-
-
 		if (Input.GetKeyDown(KeyCode.T)) {
 			Tello.takeOff();
 		} else if (Input.GetKeyDown(KeyCode.L)) {
@@ -163,8 +161,6 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 			Tello.setVideoBitRate((int)VideoBitRate.VideoBitRateAuto);
 			//Tello.setEV(0);
 			Tello.requestIframe();
-
-			Debug.Log("data received: " + UdpBase.Receive());
 		}
 	}
 
