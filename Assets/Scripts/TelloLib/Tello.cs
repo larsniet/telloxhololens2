@@ -1110,7 +1110,7 @@ namespace TelloLib
                             quatZ = BitConverter.ToSingle(xorBuf, index2); index2 += 4;
                             //Console.WriteLine("qx:" + qX + " qy:" + qY+ "qz:" + qZ);
 
-                            //var eular = toEuler(quatX, quatY, quatZ, quatW);
+                            //var eular = toEuler();
                             //Console.WriteLine(" Pitch:"+eular[0] * (180 / 3.141592) + " Roll:" + eular[1] * (180 / 3.141592) + " Yaw:" + eular[2] * (180 / 3.141592));
 
                             index2 = 10 + 76;//Start of relative velocity

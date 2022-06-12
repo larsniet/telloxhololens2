@@ -11,6 +11,8 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 
 	private static bool isLoaded = false;
 
+	public GameObject drone;
+
 	private TelloVideoTexture telloVideoTexture;
 
 	// FlipType is used for the various flips supported by the Tello.
@@ -146,10 +148,10 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 	private void Tello_onUpdate(int cmdId)
 	{
 		//throw new System.NotImplementedException();
-		Debug.Log("Tello_onUpdate : " + Tello.state);
-	}
+		//Debug.Log("Tello_onUpdate : " + Tello.state);
+    }
 
-	private void Tello_onConnection(Tello.ConnectionState newState)
+    private void Tello_onConnection(Tello.ConnectionState newState)
 	{
 		//throw new System.NotImplementedException();
 		//Debug.Log("Tello_onConnection : " + newState);
@@ -169,6 +171,24 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 		//Debug.Log("Tello_onVideoData: " + data.Length);
 		if (telloVideoTexture != null)
 			telloVideoTexture.PutVideoData(data);
+	}
+
+	public void Takeoff()
+    {
+		Tello.takeOff();
+	}
+
+	public void Land()
+    {
+		Tello.land();
+	}
+
+	public void Tello_onMove()
+    {
+		var eular = Tello.state.toEuler();
+		Debug.Log(" Pitch:" + eular[0] * (180 / 3.141592) + " Roll:" + eular[1] * (180 / 3.141592) + " Yaw:" + eular[2] * (180 / 3.141592));
+
+		Debug.Log(" AR element yaw: " +drone.transform.localRotation.eulerAngles.y);
 	}
 
 }
