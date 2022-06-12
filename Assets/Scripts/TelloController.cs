@@ -12,6 +12,9 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 	private static bool isLoaded = false;
 
 	public GameObject drone;
+	public float objectPosX;
+	public float objectPosY;
+	public float objectPosZ;
 
 	private TelloVideoTexture telloVideoTexture;
 
@@ -96,6 +99,10 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 			telloVideoTexture = FindObjectOfType<TelloVideoTexture>();
 
 		Tello.startConnecting();
+
+		objectPosX = drone.transform.position.x;
+		objectPosY = drone.transform.position.y;
+		objectPosZ = drone.transform.position.z;
 	}
 
 	void OnApplicationQuit()
@@ -107,18 +114,23 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 	void Update () {
 
 		var eular = Tello.state.toEuler();
+		Debug.Log("percentage: " + Tello.state.batteryPercentage);
+
 		double pitch = eular[0] * (180 / 3.141592);
 		double roll = eular[1] * (180 / 3.141592);
 		double yaw = eular[2] * (180 / 3.141592);
 
-		Debug.Log(" Pitch:" + pitch + " Roll:" + roll + " Yaw:" + yaw);
-		Debug.Log(" AR element yaw: " + drone.transform.localRotation.eulerAngles.y);
+		// Debug.Log(" Pitch:" + pitch + " Roll:" + roll + " Yaw:" + yaw);
+		// Debug.Log(" AR element yaw: " + drone.transform.localRotation.eulerAngles.y);
 
-		Vector3 rotation = new Vector3((float) eular[0], (float) eular[1], (float) eular[2]);
-		drone.transform.Rotate(rotation);
+		Vector3 rotation = new Vector3((float) -eular[0], (float) eular[2], (float) eular[1]);
+		// drone.transform.Rotate(rotation);
+		drone.transform.eulerAngles = rotation;
 
 		if (Input.GetKeyDown(KeyCode.T)) {
 			Tello.takeOff();
+			// Vector3 takeOff = new Vector3(-0.042f, -0.293f, 2);
+			// drone.transform.position = takeOff;
 		} else if (Input.GetKeyDown(KeyCode.L)) {
 			Tello.land();
 		}
@@ -128,16 +140,28 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 		float rx = 0f;
 		float ry = 0f;
 
-		if (Input.GetKey(KeyCode.UpArrow)) {
+		if (drone.transform.position.x != objectPosX){
+			Debug.Log("Pos X difference:" + (objectPosX - drone.transform.position.x));
+			rx = (objectPosX - drone.transform.position.x) * 500;
+			objectPosX = drone.transform.position.x;
+		}
+
+		if (drone.transform.position.z != objectPosZ){
+			Debug.Log("Pos Z difference:" + (objectPosZ - drone.transform.position.z));
+			ry = (objectPosZ - drone.transform.position.z) * 500;
+			objectPosZ = drone.transform.position.z;
+		}
+
+		if (Input.GetKey(KeyCode.U)) {
 			ry = 1;
 		}
-		if (Input.GetKey(KeyCode.DownArrow)) {
+		if (Input.GetKey(KeyCode.J)) {
 			ry = -1;
 		}
-		if (Input.GetKey(KeyCode.RightArrow)) {
+		if (Input.GetKey(KeyCode.K)) {
 			rx = 1;
 		}
-		if (Input.GetKey(KeyCode.LeftArrow)) {
+		if (Input.GetKey(KeyCode.H)) {
 			rx = -1;
 		}
 		if (Input.GetKey(KeyCode.W)) {
