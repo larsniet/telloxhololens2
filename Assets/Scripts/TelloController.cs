@@ -144,19 +144,19 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 
 		if (posX != posXOld){
 			Debug.Log("Pos X difference:" + (posX - posXOld));
-			rx = (posX - posXOld) * 1000;
+			rx = (posX - posXOld) * 100;
 			posXOld = posX;
 		}
 
 		if (posZ != posZOld){
 			Debug.Log("Pos Z difference:" + (posZ - posZOld));
-			ry = (posZ - posZOld) * 1000;
+			ry = (posZ - posZOld) * 100;
 			posZOld = posZ;
 		}
 
 		if (posY != posYOld){
 			Debug.Log("Pos Y difference:" + (posY - posYOld));
-			ly = (posY - posYOld) * 1000;
+			ly = (posY - posYOld) * 100;
 			posYOld = posY;
 		}
 
