@@ -112,7 +112,6 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 
 	// Update is called once per frame
 	void Update () {
-
 		var eular = Tello.state.toEuler();
 		var posX = drone.transform.position.x;
 		var posY = drone.transform.position.y;
