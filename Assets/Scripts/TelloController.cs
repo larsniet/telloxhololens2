@@ -12,6 +12,9 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 	private static bool isLoaded = false;
 
 	public GameObject drone;
+	public float posXOld;
+	public float posYOld;
+	public float posZOld;
 
 	private TelloVideoTexture telloVideoTexture;
 
@@ -96,29 +99,39 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 			telloVideoTexture = FindObjectOfType<TelloVideoTexture>();
 
 		Tello.startConnecting();
+
+		posXOld = drone.transform.position.x;
+		posYOld = drone.transform.position.y;
+		posZOld = drone.transform.position.z;
 	}
 
-	void OnApplicationQuit()
+	public void OnApplicationQuit()
 	{
 		Tello.stopConnecting();
 	}
 
 	// Update is called once per frame
 	void Update () {
-
 		var eular = Tello.state.toEuler();
+		var posX = drone.transform.position.x;
+		var posY = drone.transform.position.y;
+		var posZ = drone.transform.position.z;
+
 		double pitch = eular[0] * (180 / 3.141592);
 		double roll = eular[1] * (180 / 3.141592);
 		double yaw = eular[2] * (180 / 3.141592);
 
-		Debug.Log(" Pitch:" + pitch + " Roll:" + roll + " Yaw:" + yaw);
-		Debug.Log(" AR element yaw: " + drone.transform.localRotation.eulerAngles.y);
+		// Debug.Log(" Pitch:" + pitch + " Roll:" + roll + " Yaw:" + yaw);
+		// Debug.Log(" AR element yaw: " + drone.transform.localRotation.eulerAngles.y);
 
-		Vector3 rotation = new Vector3((float) eular[0], (float) eular[1], (float) eular[2]);
-		drone.transform.Rotate(rotation);
+		//Vector3 rotation = new Vector3((float) -eular[0], (float) eular[2], (float) eular[1]);
+		// drone.transform.Rotate(rotation);
+		// drone.transform.eulerAngles = rotation;
 
 		if (Input.GetKeyDown(KeyCode.T)) {
 			Tello.takeOff();
+			Vector3 takeOff = new Vector3(posX, posY + 1, posZ);
+			drone.transform.position = takeOff;
 		} else if (Input.GetKeyDown(KeyCode.L)) {
 			Tello.land();
 		}
@@ -128,16 +141,34 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 		float rx = 0f;
 		float ry = 0f;
 
-		if (Input.GetKey(KeyCode.UpArrow)) {
+		if (posX != posXOld){
+			Debug.Log("Pos X difference:" + (posX - posXOld));
+			rx = (posX - posXOld) * 100;
+			posXOld = posX;
+		}
+
+		if (posZ != posZOld){
+			Debug.Log("Pos Z difference:" + (posZ - posZOld));
+			ry = (posZ - posZOld) * 100;
+			posZOld = posZ;
+		}
+
+		if (posY != posYOld){
+			Debug.Log("Pos Y difference:" + (posY - posYOld));
+			ly = (posY - posYOld) * 100;
+			posYOld = posY;
+		}
+
+		if (Input.GetKey(KeyCode.U)) {
 			ry = 1;
 		}
-		if (Input.GetKey(KeyCode.DownArrow)) {
+		if (Input.GetKey(KeyCode.J)) {
 			ry = -1;
 		}
-		if (Input.GetKey(KeyCode.RightArrow)) {
+		if (Input.GetKey(KeyCode.K)) {
 			rx = 1;
 		}
-		if (Input.GetKey(KeyCode.LeftArrow)) {
+		if (Input.GetKey(KeyCode.H)) {
 			rx = -1;
 		}
 		if (Input.GetKey(KeyCode.W)) {
@@ -192,11 +223,6 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 	public void Land()
     {
 		Tello.land();
-	}
-
-	public void Tello_onMove()
-    {
-
 	}
 
 }
