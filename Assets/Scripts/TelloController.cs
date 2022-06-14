@@ -105,7 +105,7 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 		posZOld = drone.transform.position.z;
 	}
 
-	void OnApplicationQuit()
+	public void OnApplicationQuit()
 	{
 		Tello.stopConnecting();
 	}
@@ -125,14 +125,14 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 		// Debug.Log(" Pitch:" + pitch + " Roll:" + roll + " Yaw:" + yaw);
 		// Debug.Log(" AR element yaw: " + drone.transform.localRotation.eulerAngles.y);
 
-		// Vector3 rotation = new Vector3((float) -eular[0], (float) eular[2], (float) eular[1]);
+		//Vector3 rotation = new Vector3((float) -eular[0], (float) eular[2], (float) eular[1]);
 		// drone.transform.Rotate(rotation);
 		// drone.transform.eulerAngles = rotation;
 
 		if (Input.GetKeyDown(KeyCode.T)) {
 			Tello.takeOff();
-			// Vector3 takeOff = new Vector3(-0.042f, -0.293f, 2);
-			// drone.transform.position = takeOff;
+			Vector3 takeOff = new Vector3(posX, posY + 1, posZ);
+			drone.transform.position = takeOff;
 		} else if (Input.GetKeyDown(KeyCode.L)) {
 			Tello.land();
 		}
@@ -224,11 +224,6 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 	public void Land()
     {
 		Tello.land();
-	}
-
-	public void Tello_onMove()
-    {
-
 	}
 
 }
