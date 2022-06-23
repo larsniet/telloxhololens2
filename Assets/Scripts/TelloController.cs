@@ -130,8 +130,8 @@ public class TelloController : SingletonMonoBehaviour<TelloController> {
 
 		if (Input.GetKeyDown(KeyCode.T)) {
 			Tello.takeOff();
-			Vector3 takeOff = new Vector3(posX, posY + 1, posZ);
-			drone.transform.position = takeOff;
+			// Vector3 takeOff = new Vector3(posX, posY + 1, posZ);
+			// drone.transform.position = takeOff;
 		} else if (Input.GetKeyDown(KeyCode.L)) {
 			Tello.land();
 		}
